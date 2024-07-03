@@ -36,3 +36,7 @@ jobs:
     - name: Set Permissions
       run: |
         ssh ubuntu@51.89.148.3 "sudo chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && sudo chmod -R 775 /var/www/storage /var/www/bootstrap/cache"
+
+    - name: Run Migrations and Key Generation
+      run: |
+        ssh ubuntu@51.89.148.3 "cd /var/www && php artisan key:generate && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache"
