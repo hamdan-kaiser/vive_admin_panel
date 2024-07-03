@@ -1,0 +1,38 @@
+name: Deploy Laravel Application
+
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'  
+        extensions: mbstring, intl, mysql  
+
+    - name: Install Composer Dependencies
+      run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
+
+    - name: Copy SSH Key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
+    - name: Add SSH Key to Known Hosts
+      run: ssh-keyscan -H 51.89.148.3 >> ~/.ssh/known_hosts
+
+    - name: Deploy to VPS
+      run: |
+        rsync -avz --delete --exclude='.env' --exclude='storage/' --exclude='.git/' ./  ubuntu@51.89.148.3:/var/www/
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
