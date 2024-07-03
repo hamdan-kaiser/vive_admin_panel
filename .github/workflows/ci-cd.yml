@@ -33,9 +33,9 @@ jobs:
       run: |
         rsync -avz --no-times --no-perms --delete --exclude='.env' --exclude='storage/' --exclude='.git/' ./ ubuntu@51.89.148.3:/var/www/
 
-    - name: Set Permissions
+    - name: Set Permissions and Ensure Directories Exist
       run: |
-        ssh ubuntu@51.89.148.3 "sudo chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache && sudo chmod -R 775 /var/www/storage /var/www/bootstrap/cache"
+        ssh ubuntu@51.89.148.3 "sudo mkdir -p /var/www/storage /var/www/bootstrap/cache /var/www/resources/views && sudo chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/resources/views && sudo chmod -R 775 /var/www/storage /var/www/bootstrap/cache /var/www/resources/views"
 
     - name: Run Migrations and Key Generation
       run: |
