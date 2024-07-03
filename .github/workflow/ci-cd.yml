@@ -1,4 +1,4 @@
-name: Deploy Laravel Application
+name: Deploy Vive-Admin
 
 on:
   push:
