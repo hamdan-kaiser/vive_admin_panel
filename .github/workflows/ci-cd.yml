@@ -29,9 +29,6 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H 51.89.148.3 >> ~/.ssh/known_hosts
 
-    - name: Check Directory Structure
-      run: ssh ubuntu@51.89.148.3 "ls -la /var/www"
-
     - name: Deploy to VPS
       run: |
-        rsync -avz --delete --exclude='.env' --exclude='storage/' --exclude='.git/' ./ ubuntu@51.89.148.3:/var/www/
+        rsync -avz --no-times --no-perms --delete --exclude='.env' --exclude='storage/' --exclude='.git/' ./ ubuntu@51.89.148.3:/var/www/
