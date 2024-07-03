@@ -1,0 +1,9 @@
+        Route::prefix('{{routeName}}')->group(function () {
+             Route::get('/', [{{className}}Controller::class, 'index'])->name('{{routeName}}');
+             Route::get('{{routeName}}-data', [{{className}}Controller::class, 'data'])->name('{{routeName}}.data');
+             Route::get('create', [{{className}}Controller::class, 'create'])->name('{{routeName}}.create');
+             Route::get('edit/{id}', [{{className}}Controller::class, 'edit'])->name('{{routeName}}.edit');
+             Route::put('update/{id}', [{{className}}Controller::class, 'update'])->name('{{routeName}}.update');
+             Route::post('create', [{{className}}Controller::class, 'store'])->name('{{routeName}}.store');
+             Route::delete('delete/{id}', [{{className}}Controller::class, 'destroy'])->name('{{routeName}}.destroy');
+        });

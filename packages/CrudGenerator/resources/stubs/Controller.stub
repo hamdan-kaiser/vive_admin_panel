@@ -1,0 +1,95 @@
+<?php
+namespace App\Http\Controllers\Administrative;
+
+use App\Http\Requests\{{className}}StoreRequest;
+use App\Service\{{className}}Service;
+use App\{{modelName}};
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class {{className}}Controller extends Controller
+{
+
+    protected ${{modelNameLowerCaseFirst}}Service;
+
+    public function __construct({{className}}Service ${{modelNameLowerCaseFirst}}Service)
+    {
+        $this->{{modelNameLowerCaseFirst}}Service = ${{modelNameLowerCaseFirst}}Service;
+    }
+
+
+    public function index(){
+        return view('{{viewDirectoryName}}.{{fileDirectoryName}}.index');
+    }
+    public function data(){
+        return  $this->{{modelNameLowerCaseFirst}}Service->getAllData();
+    }
+    public function create(){
+        return view('{{viewDirectoryName}}.{{fileDirectoryName}}.create');
+    }
+    public function store({{className}}StoreRequest $request){
+        $input = $request->except('_token');
+        foreach ($input as $name => $value){
+            if(isset($_FILES[$name])){
+                $makeUniqueName = '{{fileDirectoryName}}' . time() . '-' . uniqid();
+                if ($request->hasFile($name)) {
+                    $file_name = $makeUniqueName . '.' . $request->file($name)->getClientOriginalExtension();
+                    //Store local storage
+                    $request->$name->storeAs('public/{{fileDirectoryName}}', $file_name);
+                        $contentFile = '{{fileDirectoryName}}/' . $file_name;
+                    $input[$name] = $contentFile;
+                    $mimeType = $request->file($name)->getMimeType();
+                    $input['file_type'] = substr($mimeType, 0, strrpos( $mimeType, '/'));
+                }
+            }
+        }
+        $request = new Request($input);
+        $result = $this->{{modelNameLowerCaseFirst}}Service->store($request);
+        if($result){
+            return redirect()->route('{{routePrefix}}.{{routeName}}')->with('success', '{{title}} Created Successfully');
+        }else{
+            return redirect()->back()->withInput()->with('error', 'Something Wrong,Please Try Again');
+        }
+    }
+    public function edit($id){
+        $data =  $this->{{modelNameLowerCaseFirst}}Service->findbyId($id);
+        return view('{{viewDirectoryName}}.{{fileDirectoryName}}.edit',compact('data'));
+    }
+    public function update($id,Request $request){
+        $input = $request->except('_token');
+        foreach ($input as $name => $value){
+            if(isset($_FILES[$name])){
+                $makeUniqueName = '{{fileDirectoryName}}' . time() . '-' . uniqid();
+                if ($request->hasFile($name)) {
+                    $file_name = $makeUniqueName . '.' . $request->file($name)->getClientOriginalExtension();
+                    //Store local storage
+                    $request->$name->storeAs('public/{{fileDirectoryName}}', $file_name);
+                        $contentFile = '{{fileDirectoryName}}/' . $file_name;
+                    $input[$name] = $contentFile;
+                    $mimeType = $request->file($name)->getMimeType();
+                    $input['file_type'] = substr($mimeType, 0, strrpos( $mimeType, '/'));
+                }
+            }
+        }
+        $request = new Request($input);
+        $result = $this->{{modelNameLowerCaseFirst}}Service->update($id,$request);
+        if($result){
+            return redirect()->route('{{routePrefix}}.{{routeName}}')->with('success', '{{title}} Updated Successfully');
+        }else{
+            return redirect()->back()->with('error', 'Something Wrong,Please Try Again');
+        }
+
+    }
+
+    public function destroy($id)
+    {
+        $result = $this->{{modelNameLowerCaseFirst}}Service->destroy($id);
+        if($result){
+            echo 'success';
+        }else{
+            echo 'error';
+        }
+    }
+
+
+}
