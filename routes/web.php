@@ -140,21 +140,21 @@ Route::prefix('administrative')->middleware(['auth','XssSanitizer'])->name('admi
     Route::post('/logout', [DashboardController::class, 'logout'])->name('logout');
     Route::prefix('user')->group(function () {
          Route::group(['middleware' => ['can:User Add']], function () {
-        Route::get('create', [UserController::class,'create'])->name('user.create');
-        Route::post('create', [UserController::class,'store'])->name('user.store');
+        //Route::get('create', [UserController::class,'create'])->name('user.create');
+        //Route::post('create', [UserController::class,'store'])->name('user.store');
          });
           Route::group(['middleware' => ['can:User Update']], function () {
-        Route::get('edit/{id}', [UserController::class,'edit'])->name('user.edit');
-        Route::put('update/{id}', [UserController::class,'update'])->name('user.update');
+        //Route::get('edit/{id}', [UserController::class,'edit'])->name('user.edit');
+        //Route::put('update/{id}', [UserController::class,'update'])->name('user.update');
           });
         Route::group(['middleware' => ['can:User Delete']], function () {
-            Route::delete('delete/{id}', [UserController::class,'destroy'])->name('user.destroy');
+            //Route::delete('delete/{id}', [UserController::class,'destroy'])->name('user.destroy');
         });
           Route::group(['middleware' => ['can:User View']], function () {
-        Route::get('/', [UserController::class,'index'])->name('user');
-        Route::get('user-data', [UserController::class,'data'])->name('user.data');
+        //Route::get('/', [UserController::class,'index'])->name('user');
+        //Route::get('user-data', [UserController::class,'data'])->name('user.data');
         });
-        Route::get('template/{type}/{id?}', [UserController::class,'template'])->name('user.template');
+        //Route::get('template/{type}/{id?}', [UserController::class,'template'])->name('user.template');
     });
     Route::prefix('settings')->group(function () {
         Route::get('change-password', 'UserController@changePassword')->name('change.password');
