@@ -151,14 +151,14 @@ Route::prefix('administrative')->middleware(['auth','XssSanitizer'])->name('admi
             //Route::delete('delete/{id}', [UserController::class,'destroy'])->name('user.destroy');
         });
           Route::group(['middleware' => ['can:User View']], function () {
-        //Route::get('/', [UserController::class,'index'])->name('user');
-        //Route::get('user-data', [UserController::class,'data'])->name('user.data');
+        Route::get('/', [UserController::class,'index'])->name('user');
+        Route::get('user-data', [UserController::class,'data'])->name('user.data');
         });
-        //Route::get('template/{type}/{id?}', [UserController::class,'template'])->name('user.template');
+        Route::get('template/{type}/{id?}', [UserController::class,'template'])->name('user.template');
     });
     Route::prefix('settings')->group(function () {
-        //Route::get('change-password', 'UserController@changePassword')->name('change.password');
-        //Route::post('change-password-post', 'UserController@changePasswordPost')->name('change.password.post');
+        Route::get('change-password', 'UserController@changePassword')->name('change.password');
+        Route::post('change-password-post', 'UserController@changePasswordPost')->name('change.password.post');
         Route::prefix('role')->group(function () {
 
             Route::group(['middleware' => ['can:Role Add']], function () {
