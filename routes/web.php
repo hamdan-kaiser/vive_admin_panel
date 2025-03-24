@@ -157,8 +157,8 @@ Route::prefix('administrative')->middleware(['auth','XssSanitizer'])->name('admi
         Route::get('template/{type}/{id?}', [UserController::class,'template'])->name('user.template');
     });
     Route::prefix('settings')->group(function () {
-        Route::get('change-password', 'UserController@changePassword')->name('change.password');
-        Route::post('change-password-post', 'UserController@changePasswordPost')->name('change.password.post');
+        Route::get('change-password', [UserController::class, 'changePassword'])->name('change.password');
+        Route::post('change-password-post', [UserController::class, 'changePasswordPost'])->name('change.password.post');
         Route::prefix('role')->group(function () {
 
             Route::group(['middleware' => ['can:Role Add']], function () {
