@@ -62,6 +62,16 @@ class CommonController extends Controller
         ];
         return response()->json($payload, 200);
     }
+    public function getUniversity($id){
+        $data = University::where('id',$id)->with('location')->first();
+        $payload = [
+            'code'         => 200,
+            'data' => $data,
+            'app_message'  => 'Successfully',
+            'user_message' => 'Successfully'
+        ];
+        return response()->json($payload, 200);
+    }
     public function getArticle($type){
         $data = Article::where('type',$type)->first();
         $payload = [
