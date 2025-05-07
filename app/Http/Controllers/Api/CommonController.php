@@ -113,12 +113,11 @@ class CommonController extends Controller
         }
 
         if($validator->fails()){
-            return response(
-                [
-                    'message' => 'Validation errors',
-                    'errors' =>  $validator->errors(),
-                    'status' => false
-                ], 422);
+            return response()->json([
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+                'status' => false
+            ], 422);
         }
         $contentFile = '';
         if($type == 'passport'){
@@ -256,14 +255,14 @@ class CommonController extends Controller
         $validator = Validator::make($request->all(), [
             'profile_image' => 'required'
         ]);
-        if($validator->fails()){
-            return response(
-                [
-                    'message' => 'Validation errors',
-                    'errors' =>  $validator->errors(),
-                    'status' => false
-                ], 422);
-        }
+        // if($validator->fails()){
+        //     return response(
+        //         [
+        //             'message' => 'Validation errors',
+        //             'errors' =>  $validator->errors(),
+        //             'status' => false
+        //         ], 422);
+        // }
 
         $makeUniqueName = 'profile_' . time() . '-' . uniqid();
         if ($request->hasFile('profile_image')) {
