@@ -31,7 +31,9 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api'], function 
         Route::post('/profile-image', [CommonController::class, 'profileImageUpdate']);
         Route::get('/subject-list', [CommonController::class, 'subjectList']);
         Route::get('/university-list', [CommonController::class, 'universityList']);
+        dump('university-list');
         Route::get('/university-list/{id}', [CommonController::class, 'getUniversity']);
+        dump('university-list/{id}');
         Route::post('/application-submit', [CommonController::class, 'applicationSubmit']);
         Route::get('/applications', [CommonController::class, 'getApplications']);
         Route::get('/profile', [CommonController::class, 'getProfile']);
