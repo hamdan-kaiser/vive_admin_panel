@@ -12,7 +12,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "yajra/laravel-datatables-oracle": "^9.0",
-        "hashibul/crud-generator": "dev-master",
+        "hashibul/crud-generator": "dev-main",
         "maatwebsite/excel": "^3.1",
         "laravel/passport": "^10.4",
         "spatie/laravel-permission": "^5.5"
