@@ -60,7 +60,7 @@ class CommonController extends Controller
             'app_message'  => 'Successfully',
             'user_message' => 'Successfully'
         ];
-        return response()->json($payload, 200)
+        return response()->json($payload, 200);
     }
     public function getUniversity($id) { 
      
