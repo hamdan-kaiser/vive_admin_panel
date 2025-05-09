@@ -22,18 +22,16 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api'], function 
     Route::post('/otp-submit', [AuthController::class, 'otpSubmit']);
     Route::get('/article/{type}', [CommonController::class, 'getArticle']);
     Route::get('/news', [CommonController::class, 'getNewses']);
+    Route::get('/university-list/{id}', [CommonController::class, 'getUniversity']);
+    Route::post('/profile-image', [CommonController::class, 'profileImageUpdate']);
     Route::middleware(['auth:api'])->group(function () {
         Route::post('/change-password', [AuthController::class, 'changePassword']);
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/fcm-update', [AuthController::class, 'fcmUpdate']);
         Route::get('/resend-otp', [AuthController::class, 'resendOtp']);
         Route::post('/profile-update/{type}', [CommonController::class, 'profileUpdate']);
-        Route::post('/profile-image', [CommonController::class, 'profileImageUpdate']);
         Route::get('/subject-list', [CommonController::class, 'subjectList']);
         Route::get('/university-list', [CommonController::class, 'universityList']);
-        dump('university-list');
-        Route::get('/university-list/{id}', [CommonController::class, 'getUniversity']);
-        dump('university-list/{id}');
         Route::post('/application-submit', [CommonController::class, 'applicationSubmit']);
         Route::get('/applications', [CommonController::class, 'getApplications']);
         Route::get('/profile', [CommonController::class, 'getProfile']);
