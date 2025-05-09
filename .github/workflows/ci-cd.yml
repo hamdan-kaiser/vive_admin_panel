@@ -37,9 +37,6 @@ jobs:
           --exclude='.git/' \
           ./ root@51.89.148.3:/var/www/vive_admin_panel
 
-    - name: Upload .env File to VPS
-      run: |
-        echo "${{ secrets.ENV }}" | ssh root@51.89.148.3 "cat > /var/www/vive_admin_panel/.env"
 
     - name: Ensure Laravel Directories and Permissions
       run: |
@@ -50,23 +47,13 @@ jobs:
           chmod -R 775 storage bootstrap/cache
         EOF
 
-    - name: Run Laravel Commands (Clear & Deploy)
+    - name: Run Laravel Commands
       run: |
         ssh root@51.89.148.3 << 'EOF'
           cd /var/www/vive_admin_panel
-
-          # Clear Laravel caches
           php artisan config:clear
-          php artisan route:clear
-          php artisan view:clear
-          php artisan cache:clear
-
-          # Key generation and DB migration
           php artisan key:generate
           php artisan migrate --force
-
-          # Rebuild caches
           php artisan config:cache
           php artisan route:cache
-          php artisan view:cache
-        EOF
+        EOF
