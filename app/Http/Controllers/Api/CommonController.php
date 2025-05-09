@@ -273,9 +273,11 @@ class CommonController extends Controller
             $contentFile = 'profile/' . $file_name;
         }
         $find = DB::table('users')->where('id',1)->first();
+        dump($find);
         if($find){
             $find->image = $contentFile;
             $find->save();
+        
             $payload = [
                 'code'         => 200,
                 'app_message'  => 'Successfully',
