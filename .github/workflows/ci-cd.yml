@@ -37,7 +37,6 @@ jobs:
           --exclude='.git/' \
           ./ root@51.89.148.3:/var/www/vive_admin_panel
 
-
     - name: Ensure Laravel Directories and Permissions
       run: |
         ssh root@51.89.148.3 << 'EOF'
@@ -46,6 +45,11 @@ jobs:
           chown -R www-data:www-data storage bootstrap/cache
           chmod -R 775 storage bootstrap/cache
         EOF
+
+    - name: Upload .env File to VPS
+      run: |
+        # Copy the .env file from the repository to the VPS
+        scp .env root@51.89.148.3:/var/www/vive_admin_panel/.env
 
     - name: Run Laravel Commands
       run: |
