@@ -31,7 +31,7 @@ jobs:
 
     - name: Deploy to VPS
       run: |
-        rsync -avz --no-times --no-perms --delete --exclude='.env' --exclude='storage/' --exclude='.git/' ./ root@51.89.148.3:/var/www/
+        rsync -avz --no-times --no-perms --delete --exclude='storage/' --exclude='.git/' ./ root@51.89.148.3:/var/www/
 
     - name: Set Permissions and Ensure Directories Exist
       run: |
