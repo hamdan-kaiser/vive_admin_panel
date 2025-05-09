@@ -18,25 +18,55 @@ jobs:
       with:
         php-version: '8.1'
         extensions: mbstring, intl, mysql
+        tools: composer
 
     - name: Install Composer Dependencies
-      run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
+      run: composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
-    - name: Set up SSH
+    - name: Set up SSH Access
       run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H 51.89.148.3 >> ~/.ssh/known_hosts
 
-    - name: Deploy to VPS
+    - name: Sync Files to VPS
       run: |
-        rsync -avz --no-times --no-perms --delete --exclude='storage/' --exclude='.git/' ./ root@51.89.148.3:/var/www/
+        rsync -avz --delete \
+          --exclude='storage/' \
+          --exclude='.git/' \
+          ./ root@51.89.148.3:/var/www/vive_admin_panel
 
-    - name: Set Permissions and Ensure Directories Exist
+    - name: Upload .env File to VPS
       run: |
-        ssh root@51.89.148.3 "sudo mkdir -p /var/www/storage /var/www/bootstrap/cache /var/www/resources/views && sudo chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/resources/views && sudo chmod -R 775 /var/www/storage /var/www/bootstrap/cache /var/www/resources/views"
+        echo "${{ secrets.ENV }}" | ssh root@51.89.148.3 "cat > /var/www/vive_admin_panel/.env"
 
-    - name: Run Migrations and Key Generation
+    - name: Ensure Laravel Directories and Permissions
       run: |
-        ssh root@51.89.148.3 "cd /var/www && php artisan key:generate && php artisan migrate --force && php artisan config:cache && php artisan route:cache"
+        ssh root@51.89.148.3 << 'EOF'
+          cd /var/www/vive_admin_panel
+          mkdir -p storage bootstrap/cache
+          chown -R www-data:www-data storage bootstrap/cache
+          chmod -R 775 storage bootstrap/cache
+        EOF
+
+    - name: Run Laravel Commands (Clear & Deploy)
+      run: |
+        ssh root@51.89.148.3 << 'EOF'
+          cd /var/www/vive_admin_panel
+
+          # Clear Laravel caches
+          php artisan config:clear
+          php artisan route:clear
+          php artisan view:clear
+          php artisan cache:clear
+
+          # Key generation and DB migration
+          php artisan key:generate
+          php artisan migrate --force
+
+          # Rebuild caches
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+        EOF
