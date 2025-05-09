@@ -268,15 +268,14 @@ class CommonController extends Controller
         $makeUniqueName = 'profile_' . time() . '-' . uniqid();
         if ($request->hasFile('profile_image')) {
             $file_name = $makeUniqueName . '.' . $request->file('profile_image')->getClientOriginalExtension();
-            dump($file_name);
+         
             //Store local storage
             $request->profile_image->storeAs('public/profile', $file_name);
-            dump($request->profile_image);
+         
             $contentFile = 'profile/' . $file_name;
         }
-        $find = User::where('id',1)->first();
-        dump($contentFile);
-        dump($find);
+        $find = User::where('id', $request->user()->id)->first();
+    
         if($find){
             $find->image = $contentFile;
             $find->save();
