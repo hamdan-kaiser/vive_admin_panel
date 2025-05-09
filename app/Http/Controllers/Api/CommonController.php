@@ -60,14 +60,11 @@ class CommonController extends Controller
             'app_message'  => 'Successfully',
             'user_message' => 'Successfully'
         ];
-        return response()->json($payload, 200);
+        return response()->json($payload, 200)
     }
     public function getUniversity($id) { 
-        dump($id);
-
+     
         $data = University::where('id',$id)->with('location')->first();
-        dump($data);
-
         $payload = [
             'code'         => 200,
             'data' => $data,
@@ -275,7 +272,7 @@ class CommonController extends Controller
             $request->profile_image->storeAs('public/profile', $file_name);
             $contentFile = 'profile/' . $file_name;
         }
-        $find = DB::table('users')->where('id',$request->user()->id)->first();
+        $find = DB::table('users')->where('id',1)->first();
         if($find){
             $find->image = $contentFile;
             $find->save();
