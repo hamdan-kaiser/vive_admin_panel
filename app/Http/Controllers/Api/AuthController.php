@@ -15,7 +15,7 @@ use Validator;
 class AuthController extends Controller
 {
 
-    public function signup(Requcocest $request){
+    public function signup(Request $request){
         $validator = Validator::make($request->all(), [
             'phone' => 'required|unique:users',
             "name" => "required"
