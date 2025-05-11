@@ -278,13 +278,13 @@ class CommonController extends Controller
          
             $contentFile = 'profile/' . $file_name;
         }
-        $find = User::where('id', 1)->first();
-        // $request->user()->id
+        $find = User::where('id', $request->user()->id)->first();
+       
 
         if($find){
             $find->image = $contentFile;
             $find->save();
-            dump($find);
+            // dump($find);
         
             $payload = [
                 'code'         => 200,
