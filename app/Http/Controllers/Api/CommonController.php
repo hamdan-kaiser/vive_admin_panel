@@ -151,6 +151,7 @@ class CommonController extends Controller
                     $user = Auth::user();
                     $user->email = $request->email;
                     $user->save();
+                    dump($user);
                 }
                 $payload = [
                     'code'         => 200,
