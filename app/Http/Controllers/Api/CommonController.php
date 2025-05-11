@@ -274,7 +274,7 @@ class CommonController extends Controller
             $file_name = $makeUniqueName . '.' . $request->file('profile_image')->getClientOriginalExtension();
          
             //Store local storage
-            $request->profile_image->storeAs('storage/profile', $file_name);
+            $request->profile_image->storeAs('public/profile', $file_name);
          
             $contentFile = 'profile/' . $file_name;
         }
