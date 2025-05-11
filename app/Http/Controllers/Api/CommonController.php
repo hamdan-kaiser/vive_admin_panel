@@ -276,14 +276,14 @@ class CommonController extends Controller
             //Store local storage
             $request->profile_image->storeAs('public/profile', $file_name);
          
-            $contentFile = 'profile/' . $file_name;
+            // $contentFile = 'profile/' . $file_name;
         }
         $find = User::where('id', 1)->first();
 
         // $request->user()->id
     
         if($find){
-            $find->image = $contentFile;
+            $find->image = $file_name;
             $find->save();
             dump($find);
         
