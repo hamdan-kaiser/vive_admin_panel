@@ -8,4 +8,9 @@ class Subject extends Model
 {
     use SoftDeletes;
     protected $guarded = ['id'];
+
+    // public function universities()
+    // {
+    //     return $this->belongsToMany(University::class);
+    // }
 }
