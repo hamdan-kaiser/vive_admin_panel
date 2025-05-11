@@ -151,7 +151,7 @@ class CommonController extends Controller
                     $user = Auth::user();
                     $user->email = $request->email;
                     $user->save();
-                    dump($user);
+                
                 }
                 $payload = [
                     'code'         => 200,
@@ -278,11 +278,14 @@ class CommonController extends Controller
          
             $contentFile = 'profile/' . $file_name;
         }
-        $find = User::where('id', $request->user()->id)->first();
+        $find = User::where('id', 1)->first();
+
+        // $request->user()->id
     
         if($find){
             $find->image = $contentFile;
             $find->save();
+            dump($find);
         
             $payload = [
                 'code'         => 200,
