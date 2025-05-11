@@ -22,6 +22,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api'], function 
     Route::post('/otp-submit', [AuthController::class, 'otpSubmit']);
     Route::get('/article/{type}', [CommonController::class, 'getArticle']);
     Route::get('/news', [CommonController::class, 'getNewses']);
+    Route::post('/profile-image', [CommonController::class, 'profileImageUpdate']);
     
     Route::middleware(['auth:api'])->group(function () {
         Route::post('/change-password', [AuthController::class, 'changePassword']);
@@ -32,7 +33,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api'], function 
         Route::get('/subject-list', [CommonController::class, 'subjectList']);
         Route::get('/university-list', [CommonController::class, 'universityList']);
         Route::get('/university-list/{id}', [CommonController::class, 'getUniversity']);
-        Route::post('/profile-image', [CommonController::class, 'profileImageUpdate']);
+        
         Route::post('/application-submit', [CommonController::class, 'applicationSubmit']);
         Route::get('/applications', [CommonController::class, 'getApplications']);
         Route::get('/profile', [CommonController::class, 'getProfile']);
