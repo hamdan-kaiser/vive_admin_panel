@@ -62,7 +62,7 @@ class CommonController extends Controller
         ];
         return response()->json($payload, 200);
     }
-    public function getUniversity($subject_id){ { 
+    public function getUniversity($subject_id){ 
         $data = University::with('location')->whereHas('subjects', function($query) use ($subject_id) {
             $query->where('subject_id', $subject_id);
         })->get();
