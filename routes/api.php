@@ -33,7 +33,6 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api'], function 
         Route::get('/university-list', [CommonController::class, 'universityList']);
         Route::get('/university-list/{id}', [CommonController::class, 'getUniversity']);
         Route::post('/profile-image', [CommonController::class, 'profileImageUpdate']);
-        
         Route::post('/application-submit', [CommonController::class, 'applicationSubmit']);
         Route::get('/applications', [CommonController::class, 'getApplications']);
         Route::get('/profile', [CommonController::class, 'getProfile']);
