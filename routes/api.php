@@ -22,13 +22,14 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api'], function 
     Route::post('/otp-submit', [AuthController::class, 'otpSubmit']);
     Route::get('/article/{type}', [CommonController::class, 'getArticle']);
     Route::get('/news', [CommonController::class, 'getNewses']);
+    Route::post('/remove-account', [AuthController::class, 'deleteAccount']);
     
     Route::middleware(['auth:api'])->group(function () {
         Route::post('/change-password', [AuthController::class, 'changePassword']);
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/fcm-update', [AuthController::class, 'fcmUpdate']);
         Route::get('/resend-otp', [AuthController::class, 'resendOtp']);
-        Route::post('/remove-account', [AuthController::class, 'deleteAccount']);
+        
         Route::post('/reactivate-account', [AuthController::class, 'reactivateAccount']);
         Route::post('/profile-update/{type}', [CommonController::class, 'profileUpdate']);
         Route::get('/subject-list', [CommonController::class, 'subjectList']);

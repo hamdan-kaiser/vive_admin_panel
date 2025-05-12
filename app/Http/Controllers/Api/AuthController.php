@@ -366,15 +366,17 @@ class AuthController extends Controller
     }
 
   public function deleteAccount(){
+
+    $data = User::where('id',1)->first();
    
-    if (!(auth()->user())){
+    if ($data == null){
         return response()->json([
             'message' => 'User not authenticated.',
             'status' => false
         ], 401);
     }
 
-    auth()->user()->delete();
+   $data->delete();
     return response()->json([
         'message' => 'Account temporarily deleted. It will be restored upon next login.',
         'status' => true
