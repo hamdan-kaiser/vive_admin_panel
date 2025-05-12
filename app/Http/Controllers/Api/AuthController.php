@@ -163,51 +163,44 @@ class AuthController extends Controller
 public function login(Request $request)
 {
     $validator = Validator::make($request->all(), [
+        'password' => 'required',
         'phone'    => 'required',
-        'password' => 'required'
     ]);
 
     if ($validator->fails()) {
         return response()->json([
-            'message' => 'Validation error',
+            'message' => 'Validation errors',
             'errors'  => $validator->errors(),
             'status'  => false
         ], 422);
     }
 
-    // Fetch user with trashed entries
+    // Fetch user including soft-deleted
     $user = User::withTrashed()->where('phone', trim($request->phone))->first();
 
-    if (!$user) {
+    if (!$user || !Hash::check($request->password, $user->password)) {
         return response()->json([
-            'message' => 'User not found.',
-            'status'  => false
-        ], 404);
-    }
-
-    // Check password before restoring
-    if (!Hash::check($request->password, $user->password)) {
-        return response()->json([
-            'message' => 'Email and/or Password invalid.',
-            'status'  => false
+            'code'         => 401,
+            'app_message'  => 'Login unsuccessful. Invalid credentials.',
+            'user_message' => 'Invalid credentials.',
         ], 401);
     }
 
-    // Restore the user *before* creating a token
+    // Restore soft deleted user BEFORE login
     if ($user->trashed()) {
         $user->restore();
-        $user->refresh(); // Refresh instance from DB
     }
 
-    // Now create token
+    // Now generate token
     $token = $user->createToken('VivaEducation')->accessToken;
 
     return response()->json([
-        'message' => 'Login successful.',
+        'code'         => 200,
+        'app_message'  => 'Login successful.',
+        'user_message' => 'Login successful.',
         'access_token' => $token,
-        'status' => true,
-        'data' => new UserCollection($user)
-    ]);
+        'data'         => new UserCollection($user)
+    ]);
 }
 
 
@@ -431,31 +424,6 @@ public function login(Request $request)
         'status' => true
     ]);
 }
-
-public function checkUserStatus()
-{
-    $user = \App\Models\User::withTrashed()->find(1); // ID 1
-
-    if (!$user) {
-        return response()->json([
-            'message' => 'User not found.',
-            'status' => false
-        ], 404);
-    }
-
-    return response()->json([
-        'id' => $user->id,
-        'name' => $user->name,
-        'phone' => $user->phone,
-        'email' => $user->email,
-        'is_deleted' => $user->trashed(), // true if soft deleted
-        'deleted_at' => $user->deleted_at,
-        'created_at' => $user->created_at,
-        'updated_at' => $user->updated_at,
-        'status' => true
-    ]);
-}
-
 
 
 
