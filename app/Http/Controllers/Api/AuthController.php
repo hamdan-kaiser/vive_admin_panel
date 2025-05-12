@@ -159,7 +159,6 @@ class AuthController extends Controller
             return response()->json($payload, 401);
         }
 
-
     }
 
 
@@ -386,24 +385,5 @@ class AuthController extends Controller
         }
     }
 
-    // public function reactivateAccount(Request $request){
-    //     $user = User::onlyTrashed()->where('id',$request->user()->id)->first();
-    //     if($user){
-    //         $user->restore();
-    //         $payload = [
-    //             'code'         => 200,
-    //             'app_message'  => 'Account Reactivated Successfully',
-    //             'user_message' => 'Account Reactivated Successfully.',
-    //         ];
-    //         return response()->json($payload, 200);
-    //     }else{
-    //         $payload = [
-    //             'code'         => 500,
-    //             'app_message'  => 'User not found',
-    //             'user_message' =>'User not found',
-    //         ];
-    //         return response()->json($payload, 500);
-    //     }
-    // }
 
 }
