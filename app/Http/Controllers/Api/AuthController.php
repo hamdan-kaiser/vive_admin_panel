@@ -365,25 +365,25 @@ class AuthController extends Controller
         }
     }
 
-    public function deleteAccount(Request $request){
-        $user = User::where('id',$request->user()->id)->first();
-        if($user){
-            $user->delete();
-            $payload = [
-                'code'         => 200,
-                'app_message'  => 'Account Deleted Successfully',
-                'user_message' => 'Account Deleted Successfully.',
-            ];
-            return response()->json($payload, 200);
-        }else{
-            $payload = [
-                'code'         => 500,
-                'app_message'  => 'User not found',
-                'user_message' =>'User not found',
-            ];
-            return response()->json($payload, 500);
-        }
-    }
+    // public function deleteAccount(Request $request){
+    //     $user = User::where('id',$request->user()->id)->first();
+    //     if($user){
+    //         $user->delete();
+    //         $payload = [
+    //             'code'         => 200,
+    //             'app_message'  => 'Account Deleted Successfully',
+    //             'user_message' => 'Account Deleted Successfully.',
+    //         ];
+    //         return response()->json($payload, 200);
+    //     }else{
+    //         $payload = [
+    //             'code'         => 500,
+    //             'app_message'  => 'User not found',
+    //             'user_message' =>'User not found',
+    //         ];
+    //         return response()->json($payload, 500);
+    //     }
+    // }
 
 
 }
