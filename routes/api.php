@@ -23,6 +23,8 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api'], function 
     Route::get('/article/{type}', [CommonController::class, 'getArticle']);
     Route::get('/news', [CommonController::class, 'getNewses']);
     Route::post('/remove-account', [AuthController::class, 'deleteAccount']);
+    Route::get('/user/status', [UserController::class, 'checkUserStatus']);
+
     
     Route::middleware(['auth:api'])->group(function () {
         Route::post('/change-password', [AuthController::class, 'changePassword']);

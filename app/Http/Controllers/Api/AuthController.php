@@ -432,6 +432,31 @@ public function login(Request $request)
     ]);
 }
 
+public function checkUserStatus()
+{
+    $user = \App\Models\User::withTrashed()->find(1); // ID 1
+
+    if (!$user) {
+        return response()->json([
+            'message' => 'User not found.',
+            'status' => false
+        ], 404);
+    }
+
+    return response()->json([
+        'id' => $user->id,
+        'name' => $user->name,
+        'phone' => $user->phone,
+        'email' => $user->email,
+        'is_deleted' => $user->trashed(), // true if soft deleted
+        'deleted_at' => $user->deleted_at,
+        'created_at' => $user->created_at,
+        'updated_at' => $user->updated_at,
+        'status' => true
+    ]);
+}
+
+
 
 
 }
