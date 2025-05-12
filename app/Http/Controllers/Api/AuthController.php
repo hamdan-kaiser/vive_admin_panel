@@ -160,10 +160,11 @@ class AuthController extends Controller
     //     }
 
     // }
-    public function login(Request $request) {
+   public function login(Request $request)
+{
     $validator = Validator::make($request->all(), [
         'password' => 'required',
-        'phone'    => 'required'
+        'phone' => 'required',
     ]);
 
     if ($validator->fails()) {
@@ -174,12 +175,11 @@ class AuthController extends Controller
         ], 422);
     }
 
-    // Include soft-deleted users
     $user = User::withTrashed()->where('phone', trim($request->phone))->first();
 
     if ($user) {
         if (Hash::check($request->password, $user->password)) {
-            // Restore if soft-deleted
+            // Restore soft-deleted account
             if ($user->trashed()) {
                 $user->restore();
             }
@@ -187,29 +187,27 @@ class AuthController extends Controller
             $token = $user->createToken('VivaEducation')->accessToken;
 
             return response()->json([
-                'code'         => 200,
-                'app_message'  => 'Login successful, credentials matched.',
+                'code' => 200,
+                'app_message' => 'Login successful, credentials matched.',
                 'user_message' => 'Login successful.',
                 'access_token' => $token,
-                'data'         => new UserCollection($user)
+                'data' => new UserCollection($user)
             ], 200);
         } else {
             return response()->json([
-                'code'         => 401,
-                'app_message'  => 'Login unsuccessful, password mismatch',
+                'code' => 401,
+                'app_message' => 'Login unsuccessful, password mismatch.',
                 'user_message' => 'Credentials didn\'t validate.',
             ], 401);
         }
-    } else {
-        return response()->json([
-            'code'         => 401,
-            'app_message'  => 'Login unsuccessful, user not found',
-            'user_message' => 'Credentials didn\'t validate.',
-        ], 401);
     }
+
+    return response()->json([
+        'code' => 401,
+        'app_message' => 'Login unsuccessful, credentials mismatch.',
+        'user_message' => 'Credentials didn\'t validate.',
+    ], 401);
 }
-
-
 
     public function resendOtp(){
         $userId = Auth::id();
