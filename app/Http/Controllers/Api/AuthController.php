@@ -160,48 +160,56 @@ class AuthController extends Controller
     //     }
 
     // }
-   public function login(Request $request)
+public function login(Request $request)
 {
     $validator = Validator::make($request->all(), [
-        'password' => 'required',
         'phone'    => 'required',
+        'password' => 'required'
     ]);
 
     if ($validator->fails()) {
         return response()->json([
-            'message' => 'Validation errors',
+            'message' => 'Validation error',
             'errors'  => $validator->errors(),
             'status'  => false
         ], 422);
     }
 
-    // Fetch user including soft-deleted
+    // Get soft deleted user also
     $user = User::withTrashed()->where('phone', trim($request->phone))->first();
 
-    if (!$user || !Hash::check($request->password, $user->password)) {
+    if (!$user) {
         return response()->json([
-            'code'         => 401,
-            'app_message'  => 'Login unsuccessful. Invalid credentials.',
-            'user_message' => 'Invalid credentials.',
+            'message' => 'User not found.',
+            'status'  => false
+        ], 404);
+    }
+
+    // Check password
+    if (!Hash::check($request->password, $user->password)) {
+        return response()->json([
+            'message' => 'Email and/or Password invalid.',
+            'status'  => false
         ], 401);
     }
 
-    // Restore soft deleted user BEFORE login
+    // Restore if soft deleted
     if ($user->trashed()) {
-        $user->restore();
+        $user->restore();  // Important
     }
 
-    // Now generate token
+    // Create token
     $token = $user->createToken('VivaEducation')->accessToken;
 
     return response()->json([
-        'code'         => 200,
-        'app_message'  => 'Login successful.',
-        'user_message' => 'Login successful.',
+        'message' => 'Login successful.',
         'access_token' => $token,
-        'data'         => new UserCollection($user)
+        'status' => true,
+        'data' => new UserCollection($user)
     ]);
 }
+
+
 
 
     public function resendOtp(){
