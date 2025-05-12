@@ -175,7 +175,7 @@ public function login(Request $request)
         ], 422);
     }
 
-    // Get soft deleted user also
+    // Fetch user with trashed entries
     $user = User::withTrashed()->where('phone', trim($request->phone))->first();
 
     if (!$user) {
@@ -185,7 +185,7 @@ public function login(Request $request)
         ], 404);
     }
 
-    // Check password
+    // Check password before restoring
     if (!Hash::check($request->password, $user->password)) {
         return response()->json([
             'message' => 'Email and/or Password invalid.',
@@ -193,12 +193,13 @@ public function login(Request $request)
         ], 401);
     }
 
-    // Restore if soft deleted
+    // Restore the user *before* creating a token
     if ($user->trashed()) {
-        $user->restore();  // Important
+        $user->restore();
+        $user->refresh(); // Refresh instance from DB
     }
 
-    // Create token
+    // Now create token
     $token = $user->createToken('VivaEducation')->accessToken;
 
     return response()->json([
@@ -208,8 +209,6 @@ public function login(Request $request)
         'data' => new UserCollection($user)
     ]);
 }
-
-
 
 
     public function resendOtp(){
