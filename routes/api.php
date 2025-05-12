@@ -28,7 +28,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api'], function 
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::post('/fcm-update', [AuthController::class, 'fcmUpdate']);
         Route::get('/resend-otp', [AuthController::class, 'resendOtp']);
-        Route::post('/delete-account', [AuthController::class, 'deleteAccount']);
+        Route::post('/remove-account', [AuthController::class, 'deleteAccount']);
         Route::post('/reactivate-account', [AuthController::class, 'reactivateAccount']);
         Route::post('/profile-update/{type}', [CommonController::class, 'profileUpdate']);
         Route::get('/subject-list', [CommonController::class, 'subjectList']);
