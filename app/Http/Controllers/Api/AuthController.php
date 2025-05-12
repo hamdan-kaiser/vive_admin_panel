@@ -110,57 +110,113 @@ class AuthController extends Controller
             return response()->json($payload, 500);
         }
     }
-    public function login(Request $request){
+    // public function login(Request $request){
 
-        $validator = Validator::make($request->all(), [
-            'password' => 'required',
-            "phone" => "required"
-        ]);
-        if($validator->fails()){
-            return response(
-                [
-                    'message' => 'Validation errors',
-                    'errors' =>  $validator->errors(),
-                    'status' => false
-                ], 422);
-        }
-        $user = User::where('phone','=', trim($request->phone))->first();
-        if($user)
-        {
-            if(Hash::check($request->password, $user->password)){
-                $user = User::find($user->id);
-                $token =  $user->createToken('VivaEducation')->accessToken;
-                $payload = [
-                    'code'         => 200,
-                    'app_message'  => 'Login successful, credentials matched.',
-                    'user_message' => 'Login successful.',
-                    'access_token' => $token,
-                    'data'      => new UserCollection($user)
-                ];
-
-
-                return response()->json($payload, 200);
-            }
-            else{
-                $payload = [
-                    'code'         => 401,
-                    'app_message'  => 'login unsuccessful, password mismatch',
-                    'user_message' => 'Credentials didn\'t validate.',
-                ];
-                return response()->json($payload, 401);
-            }
-        }
-        else{
-            $payload = [
-                'code'         => 401,
-                'app_message'  => 'login unsuccessful, credentials mismatch-match',
-                'user_message' => 'Credentials didn\'t validate.',
-            ];
-            return response()->json($payload, 401);
-        }
+    //     $validator = Validator::make($request->all(), [
+    //         'password' => 'required',
+    //         "phone" => "required"
+    //     ]);
+    //     if($validator->fails()){
+    //         return response(
+    //             [
+    //                 'message' => 'Validation errors',
+    //                 'errors' =>  $validator->errors(),
+    //                 'status' => false
+    //             ], 422);
+    //     }
+    //     $user = User::where('phone','=', trim($request->phone))->first();
+    //     if($user)
+    //     {
+    //         if(Hash::check($request->password, $user->password)){
+    //             $user = User::find($user->id);
+    //             $token =  $user->createToken('VivaEducation')->accessToken;
+    //             $payload = [
+    //                 'code'         => 200,
+    //                 'app_message'  => 'Login successful, credentials matched.',
+    //                 'user_message' => 'Login successful.',
+    //                 'access_token' => $token,
+    //                 'data'      => new UserCollection($user)
+    //             ];
 
 
+    //             return response()->json($payload, 200);
+    //         }
+    //         else{
+    //             $payload = [
+    //                 'code'         => 401,
+    //                 'app_message'  => 'login unsuccessful, password mismatch',
+    //                 'user_message' => 'Credentials didn\'t validate.',
+    //             ];
+    //             return response()->json($payload, 401);
+    //         }
+    //     }
+    //     else{
+    //         $payload = [
+    //             'code'         => 401,
+    //             'app_message'  => 'login unsuccessful, credentials mismatch-match',
+    //             'user_message' => 'Credentials didn\'t validate.',
+    //         ];
+    //         return response()->json($payload, 401);
+    //     }
+
+
+    // }
+
+    public function login(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'password' => 'required',
+        'phone' => 'required'
+    ]);
+
+    if ($validator->fails()) {
+        return response([
+            'message' => 'Validation errors',
+            'errors' => $validator->errors(),
+            'status' => false
+        ], 422);
     }
+
+    // Use withTrashed() to check for soft-deleted accounts
+    $user = User::withTrashed()->where('phone', trim($request->phone))->first();
+
+    if (!$user) {
+        return response()->json([
+            'code' => 401,
+            'app_message' => 'Login unsuccessful, user not found.',
+            'user_message' => 'Credentials didn\'t validate.',
+        ], 401);
+    }
+
+    // Check if user is soft deleted
+    if ($user->trashed()) {
+        return response()->json([
+            'code' => 403,
+            'app_message' => 'Account is deactivated.',
+            'user_message' => 'Your account is deactivated. Please contact support or reactivate it.',
+        ], 403);
+    }
+
+    // Validate password
+    if (!Hash::check($request->password, $user->password)) {
+        return response()->json([
+            'code' => 401,
+            'app_message' => 'Login unsuccessful, password mismatch.',
+            'user_message' => 'Credentials didn\'t validate.',
+        ], 401);
+    }
+
+    // Successful login
+    $token = $user->createToken('VivaEducation')->accessToken;
+
+    return response()->json([
+        'code' => 200,
+        'app_message' => 'Login successful, credentials matched.',
+        'user_message' => 'Login successful.',
+        'access_token' => $token,
+        'data' => new UserCollection($user)
+    ], 200);
+}
     public function resendOtp(){
         $userId = Auth::id();
         $user = User::where('id',$userId)->first();
@@ -352,6 +408,46 @@ class AuthController extends Controller
                 'user_message' => 'Otp Send Successful.',
                 'otp' => $otp,
                 'data'      => new UserCollection($user)
+            ];
+            return response()->json($payload, 200);
+        }else{
+            $payload = [
+                'code'         => 500,
+                'app_message'  => 'User not found',
+                'user_message' =>'User not found',
+            ];
+            return response()->json($payload, 500);
+        }
+    }
+
+    public function deleteAccount(Request $request){
+        $user = User::where('id',$request->user()->id)->first();
+        if($user){
+            $user->delete();
+            $payload = [
+                'code'         => 200,
+                'app_message'  => 'Account Deleted Successfully',
+                'user_message' => 'Account Deleted Successfully.',
+            ];
+            return response()->json($payload, 200);
+        }else{
+            $payload = [
+                'code'         => 500,
+                'app_message'  => 'User not found',
+                'user_message' =>'User not found',
+            ];
+            return response()->json($payload, 500);
+        }
+    }
+
+    public function reactivateAccount(Request $request){
+        $user = User::onlyTrashed()->where('id',$request->user()->id)->first();
+        if($user){
+            $user->restore();
+            $payload = [
+                'code'         => 200,
+                'app_message'  => 'Account Reactivated Successfully',
+                'user_message' => 'Account Reactivated Successfully.',
             ];
             return response()->json($payload, 200);
         }else{
