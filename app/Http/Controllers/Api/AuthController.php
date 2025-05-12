@@ -175,8 +175,10 @@ public function login(Request $request)
         ], 422);
     }
 
-    // Fetch user including soft-deleted
-    $user = User::withTrashed()->where('phone', trim($request->phone))->first();
+    $phone = trim($request->phone);
+
+    // Include soft-deleted users
+    $user = User::withTrashed()->where('phone', $phone)->first();
 
     if (!$user || !Hash::check($request->password, $user->password)) {
         return response()->json([
@@ -186,12 +188,20 @@ public function login(Request $request)
         ], 401);
     }
 
-    // Restore soft deleted user BEFORE login
     if ($user->trashed()) {
-        $user->restore();
+        // Optional: only allow reactivation if deleted by user
+        if ($user->deleted_by_user) {
+            $user->restore();
+        } else {
+            return response()->json([
+                'code'         => 403,
+                'app_message'  => 'Your account is disabled. Contact support.',
+                'user_message' => 'Account disabled. Contact support.',
+            ], 403);
+        }
     }
 
-    // Now generate token
+    // Generate access token
     $token = $user->createToken('VivaEducation')->accessToken;
 
     return response()->json([
@@ -202,7 +212,6 @@ public function login(Request $request)
         'data'         => new UserCollection($user)
     ]);
 }
-
 
     public function resendOtp(){
         $userId = Auth::id();
