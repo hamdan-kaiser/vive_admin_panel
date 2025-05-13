@@ -22,7 +22,7 @@ Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api'], function 
     Route::post('/otp-submit', [AuthController::class, 'otpSubmit']);
     Route::get('/article/{type}', [CommonController::class, 'getArticle']);
     Route::get('/news', [CommonController::class, 'getNewses']);
-    // Route::delete('/remove-account', [AuthController::class, 'deleteAccount']);
+    Route::delete('/remove-account', [AuthController::class, 'deleteAccount']);
     Route::get('/user/status', [UserController::class, 'checkUserStatus']);
 
     
