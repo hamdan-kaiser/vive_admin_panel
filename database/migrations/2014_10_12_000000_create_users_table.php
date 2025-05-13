@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->boolean('is_verified')->default(0);
             $table->rememberToken();
             $table->timestamps();
-            // $table->softDeletes();
+         
         });
     }
 

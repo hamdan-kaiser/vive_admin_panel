@@ -160,56 +160,6 @@ class AuthController extends Controller
         }
 
     }
-//     public function login(Request $request)
-// {
-//     $validator = Validator::make($request->all(), [
-//         'password' => 'required',
-//         'phone' => 'required'
-//     ]);
-
-//     if ($validator->fails()) {
-//         return response([
-//             'message' => 'Validation errors',
-//             'errors' =>  $validator->errors(),
-//             'status' => false
-//         ], 422);
-//     }
-
-//     $user = User::withTrashed()->where('phone', trim($request->phone))->first();
-
-//     if ($user) {
-//         // Restore if soft deleted
-//         if ($user->trashed()) {
-//             $user->restore();
-//         }
-
-//         if (Hash::check($request->password, $user->password)) {
-//             $token = $user->createToken('VivaEducation')->accessToken;
-//             $payload = [
-//                 'code'         => 200,
-//                 'app_message'  => 'Login successful, credentials matched.',
-//                 'user_message' => 'Login successful.',
-//                 'access_token' => $token,
-//                 'data'         => new UserCollection($user)
-//             ];
-
-//             return response()->json($payload, 200);
-//         } else {
-//             return response()->json([
-//                 'code'         => 401,
-//                 'app_message'  => 'Login unsuccessful, password mismatch',
-//                 'user_message' => 'Credentials didn\'t validate.',
-//             ], 401);
-//         }
-//     } else {
-//         return response()->json([
-//             'code'         => 401,
-//             'app_message'  => 'Login unsuccessful, user not found',
-//             'user_message' => 'Credentials didn\'t validate.',
-//         ], 401);
-//     }
-// }
-
 
 
     public function resendOtp(){
@@ -414,7 +364,7 @@ class AuthController extends Controller
 
   public function deleteAccount(){
 
-    $data = User::where('id',12)->first();
+    $data = auth()->user();
    
     if ($data == null){
         return response()->json([
@@ -423,7 +373,15 @@ class AuthController extends Controller
         ], 401);
     }
 
-   $data->delete();
+    $user = User::where('id',$data->id)->first();
+    if (!$user){
+        return response()->json([
+            'message' => 'User not found.',
+            'status' => false
+        ], 401);
+    }
+   $user->is_active = false;
+   $user->save();
     return response()->json([
         'message' => 'Account temporarily deleted. It will be restored upon next login.',
         'status' => true
