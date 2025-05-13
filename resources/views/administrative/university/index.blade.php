@@ -116,7 +116,7 @@
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'Title'},
                     {data: 'subjects', name: 'subjects'},
-                    {data: 'location.title', name: 'location'},
+                    {data: 'location', name: 'location'},
                     {data: 'tution_fee', name: 'tution_fee'},
                     {data: 'session', name: 'session'},
                     {data: 'scholarship', name: 'scholarship'},
