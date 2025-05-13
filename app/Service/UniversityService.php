@@ -60,7 +60,7 @@ class UniversityService
                 if(!$row['location']){
                     $location = 'N/A';
                 }
-                $html.= '<span class="badge border border-success text-info mr-1">'.$location.'</span>';
+                $html= '<span class="badge border border-success text-info mr-1">'.$location.'</span>';
         
                 return $html;
             })
