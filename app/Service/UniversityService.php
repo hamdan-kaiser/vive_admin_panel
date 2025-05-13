@@ -57,10 +57,12 @@ class UniversityService
             })
              ->addColumn('location',function ($row){
                 $location = $row->location;
+                dd($location);
                 if(!$row['location']){
                     $location = 'N/A';
                 }
-                $html= '<span class="badge border border-success text-info mr-1">'.$location->title.'</span>';
+        
+                $html= '<span class="badge border border-success text-info mr-1">'.$location.'</span>';
         
                 return $html;
             })
