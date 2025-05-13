@@ -364,7 +364,7 @@ class AuthController extends Controller
 
   public function deleteAccount(){
 
-    $data = User::where('id',9)->first();
+    $data = User::where('id',12)->first();
    
     if ($data == null){
         return response()->json([
