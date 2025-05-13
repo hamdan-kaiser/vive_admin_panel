@@ -55,7 +55,16 @@ class UniversityService
 
                 return $html;
             })
-            ->rawColumns(['action','scholarship','subjects','ielts'])
+             ->addColumn('location',function ($row){
+                $location = $row->location;
+                $html = '';
+                foreach($location as $item){
+                    $html.= '<span class="badge border border-success text-info mr-1">'.$item->title.'</span>';
+                }
+
+                return $html;
+            })
+            ->rawColumns(['action','scholarship','subjects','location','ielts'])
             ->blacklist(['created_at', 'updated_at','action'])
             ->addIndexColumn()
             ->toJson();

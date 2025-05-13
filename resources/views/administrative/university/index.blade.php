@@ -98,7 +98,7 @@
 @section('page-js')
     <script>
         $(document).ready(function() {
-            console.log(data);
+           
             $('#datatables').DataTable({
                 "aLengthMenu": [
                     [10, 30, 50, -1],
@@ -110,19 +110,13 @@
                 },
                 processing: true,
                 serverSide: true,
-                ajax: {
-                     url: '{{ route('administrative.university.data') }}',
-                        dataSrc: function(data) {
-                        console.log(data); // ✅ Log response from server
-                        return data.data; // Adjust this based on actual structure
-                            }
-                     },
+                ajax: '{{route('administrative.university.data')}}',
                 
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'Title'},
                     {data: 'subjects', name: 'subjects'},
-                    {data: 'location.title', name: 'location.title'},
+                    {data: 'location.title', name: 'location'},
                     {data: 'tution_fee', name: 'tution_fee'},
                     {data: 'session', name: 'session'},
                     {data: 'scholarship', name: 'scholarship'},
