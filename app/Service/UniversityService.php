@@ -57,11 +57,11 @@ class UniversityService
             })
              ->addColumn('location',function ($row){
                 $location = $row->location;
-                $html = '';
-                foreach($location as $item){
-                    $html.= '<span class="badge border border-success text-info mr-1">'.$item->title.'</span>';
+                if(!$row['location']){
+                    $location = 'N/A';
                 }
-
+                $html.= '<span class="badge border border-success text-info mr-1">'.$location.'</span>';
+        
                 return $html;
             })
             ->rawColumns(['action','scholarship','subjects','location','ielts'])
