@@ -113,7 +113,7 @@
                 console.log(data);
                 columns: [
                     {data: 'id', name: 'id'},
-                    {data: 'title', name: 'title'},
+                    {data: 'title', name: 'Title'},
                     {data: 'subjects', name: 'subjects'},
                     {data: 'location.title', name: 'location.title'},
                     {data: 'tution_fee', name: 'tution_fee'},
