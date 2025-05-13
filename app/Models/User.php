@@ -20,6 +20,25 @@ class User extends Authenticatable
      */
  protected $guarded = ['id'];
 
+
+ 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'phone',
+        'email',
+        'password',
+        'otp',
+        'is_verified',
+        'is_active',
+    ];
+
+
+
     /**
      * The attributes that should be hidden for serialization.
      *

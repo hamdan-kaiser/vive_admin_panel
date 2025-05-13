@@ -8,4 +8,10 @@ class JobStatus extends Model
 {
     use SoftDeletes;
     protected $guarded = ['id'];
+
+     protected $fillable = [
+        'title',
+    ];
+
+    protected $dates = ['deleted_at'];
 }

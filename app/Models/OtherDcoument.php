@@ -9,6 +9,13 @@ class OtherDcoument extends Model
     use SoftDeletes;
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'type',
+        'letter',
+    ];
+
+    protected $dates = ['deleted_at'];
+
     public function getLetterAttribute($value)
     {
         if ($value) {

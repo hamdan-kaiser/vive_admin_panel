@@ -9,6 +9,17 @@ class Professional extends Model
     use SoftDeletes;
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'title',
+        'company_name',
+        'from',
+        'to',
+        'location',
+        'experience_letter',
+    ];
+
+    protected $dates = ['from', 'to', 'deleted_at'];
+
     public function getExperienceLetterAttribute($value)
     {
         if ($value) {

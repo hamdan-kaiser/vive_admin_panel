@@ -11,7 +11,7 @@
                         <div class="cover-body d-flex justify-content-between align-items-center">
                             <div>
                                 <img class="profile-pic" src="{{$data->user->image}}" alt="profile">
-                                <span class="profile-name">{{$data->user->name}}</span>
+                                <span class="profile-name">{{ $data->user->name ?? '' }}</span>
                             </div>
                             <div class="d-none d-md-block">
                                 <div class="dropdown">
@@ -43,11 +43,11 @@
                         </div>
                         <div class="mt-3">
                             <label class="tx-11 font-weight-bold mb-0 text-uppercase">Subject:</label>
-                            <p class="text-muted">{{$data->subject->name}}</p>
+                            <p class="text-muted">{{$data->subject->name ?? ''}}</p>
                         </div>
                         <div class="mt-3">
                             <label class="tx-11 font-weight-bold mb-0 text-uppercase">University:</label>
-                            <p class="text-muted">{{$data->university->name}}</p>
+                            <p class="text-muted">{{$data->university->name ?? ''}}</p>
                         </div>
                         <div class="mt-3">
                             <label class="tx-11 font-weight-bold mb-0 text-uppercase">IELTS Score:</label>

@@ -8,4 +8,17 @@ class Article extends Model
 {
     use SoftDeletes;
     protected $guarded = ['id'];
+
+     protected $fillable = [
+        'type',
+        'description',
+    ];
+
+    protected $casts = [
+        'type' => 'string',
+    ];
+
+    protected $dates = [
+        'deleted_at',
+    ];
 }

@@ -9,6 +9,18 @@ class PassportProfile extends Model
 {
     use HasFactory;
 
+     protected $fillable = [
+        'user_id',
+        'given_name',
+        'surname',
+        'passport_no',
+        'date_of_birth',
+        'address',
+        'ielts_score',
+        'passport_expire',
+        'passport_image',
+    ];
+
     public function getPassportImageAttribute($value)
     {
         if ($value) {

@@ -9,6 +9,27 @@ class Application extends Model
     use SoftDeletes;
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'user_id',
+        'course_type',
+        'subject_id',
+        'university_id',
+        'surname',
+        'given_name',
+        'email',
+        'date_of_birth',
+        'address',
+        'passport_no',
+        'expiry_date',
+        'ielts_score',
+        'passport_file',
+    ];
+
+    protected $dates = [
+        'deleted_at',
+        'expiry_date',
+    ];
+
     public function university (){
         return $this->belongsTo(University::class);
     }

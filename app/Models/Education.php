@@ -9,6 +9,17 @@ class Education extends Model
     use SoftDeletes;
     protected $guarded = ['id'];
 
+
+     protected $fillable = [
+        'title',
+        'institution_name',
+        'passing_year',
+        'grade',
+        'certificate',
+    ];
+
+    protected $dates = ['deleted_at'];
+
     public function getCertificateAttribute($value)
     {
         if ($value) {

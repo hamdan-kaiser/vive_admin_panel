@@ -129,6 +129,8 @@ class AuthController extends Controller
         {
             if(Hash::check($request->password, $user->password)){
                 $user = User::find($user->id);
+                $user->is_active = true;
+                $user->save();
                 $token =  $user->createToken('VivaEducation')->accessToken;
                 $payload = [
                     'code'         => 200,
