@@ -98,6 +98,7 @@
 @section('page-js')
     <script>
         $(document).ready(function() {
+            console.log(data);
             $('#datatables').DataTable({
                 "aLengthMenu": [
                     [10, 30, 50, -1],
@@ -109,8 +110,14 @@
                 },
                 processing: true,
                 serverSide: true,
-                ajax: '{{route('administrative.university.data')}}',
-                console.log(data);
+                ajax: {
+                     url: '{{ route('administrative.university.data') }}',
+                        dataSrc: function(data) {
+                        console.log(data); // ✅ Log response from server
+                        return data.data; // Adjust this based on actual structure
+                            }
+                     },
+                
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'Title'},
