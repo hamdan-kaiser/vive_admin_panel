@@ -110,9 +110,10 @@
                 processing: true,
                 serverSide: true,
                 ajax: '{{route('administrative.university.data')}}',
+                console.log(data);
                 columns: [
                     {data: 'id', name: 'id'},
-                    {data: 'title', name: 'Title'},
+                    {data: 'title', name: 'title'},
                     {data: 'subjects', name: 'subjects'},
                     {data: 'location.title', name: 'location.title'},
                     {data: 'tution_fee', name: 'tution_fee'},
