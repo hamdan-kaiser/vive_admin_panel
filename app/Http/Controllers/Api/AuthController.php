@@ -370,7 +370,7 @@ class AuthController extends Controller
    
     if ($data == null){
         return response()->json([
-            'code' => '401',
+            'code' => 401,
             'app_message' => 'User not authenticated.',
             'user_message' => 'User not authenticated.'
         ], 401);
@@ -379,7 +379,7 @@ class AuthController extends Controller
     $user = User::where('id',$data->id)->first();
     if (!$user){
         return response()->json([
-            'code' => '401',
+            'code' => 401,
             'app_message' => 'User not found.',
             'user_message' => 'User not found.'
         ], 401);
@@ -387,7 +387,7 @@ class AuthController extends Controller
    $user->is_active = false;
    $user->save();
      return response()->json([
-        'code' => '200',
+        'code' => 200,
         'app_message' => 'Account temporarily deleted. It will be restored upon next login.',
         'user_message' => 'Account temporarily deleted. It will be restored upon next login.'
     ], 200);
