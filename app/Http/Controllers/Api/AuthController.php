@@ -370,24 +370,27 @@ class AuthController extends Controller
    
     if ($data == null){
         return response()->json([
-            'message' => 'User not authenticated.',
-            'status' => false
+            'code' => '401',
+            'app_message' => 'User not authenticated.',
+            'user_message' => 'User not authenticated.'
         ], 401);
     }
 
     $user = User::where('id',$data->id)->first();
     if (!$user){
         return response()->json([
-            'message' => 'User not found.',
-            'status' => false
+            'code' => '401',
+            'app_message' => 'User not found.',
+            'user_message' => 'User not found.'
         ], 401);
     }
    $user->is_active = false;
    $user->save();
-    return response()->json([
-        'message' => 'Account temporarily deleted. It will be restored upon next login.',
-        'status' => true
-    ]);
+     return response()->json([
+        'code' => '200',
+        'app_message' => 'Account temporarily deleted. It will be restored upon next login.',
+        'user_message' => 'Account temporarily deleted. It will be restored upon next login.'
+    ], 200);
 }
 
 
