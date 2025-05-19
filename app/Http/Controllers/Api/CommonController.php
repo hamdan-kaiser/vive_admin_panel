@@ -192,7 +192,8 @@ class CommonController extends Controller
         $validator = Validator::make($request->all(), [
             'course_type' => 'required',
             'subject_id' => 'required',
-            'university_id' => 'required'
+            'university_id' => 'required',
+            'passport_image' => 'nullable|file|max:5120'
         ]);
 
         if($validator->fails()){
@@ -258,7 +259,8 @@ class CommonController extends Controller
     }
     public function profileImageUpdate(Request $request){
         $validator = Validator::make($request->all(), [
-            'profile_image' => 'required'
+            'profile_image' => 'required',
+            'profile_image' => 'required|file|max:5120'
         ]);
         if($validator->fails()){
             return response(
