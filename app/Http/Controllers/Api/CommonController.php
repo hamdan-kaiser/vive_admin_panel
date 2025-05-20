@@ -112,7 +112,7 @@ class CommonController extends Controller
                 'ielts_score' => 'required',
                 'address' => 'required',
                 'passport_expire' => 'required',
-                'passport_image' => 'required',
+                'passport_image' => 'required|file|max:5120'
             ]);
         }
 
@@ -257,61 +257,112 @@ class CommonController extends Controller
         }
 
     }
-    public function profileImageUpdate(Request $request){
-        $validator = Validator::make($request->all(), [
-            'profile_image' => 'required',
-            'profile_image' => 'required|file|max:5120'
-        ]);
-        if($validator->fails()){
-            return response(
-                [
-                    'message' => 'Validation errors',
-                    'errors' =>  $validator->errors(),
-                    'status' => false
-                ], 422);
-        }
+    // public function profileImageUpdate(Request $request){
+    //     $validator = Validator::make($request->all(), [
+    //         'profile_image' => 'required',
+    //         'profile_image' => 'required|file|max:5120'
+    //     ]);
+    //     if($validator->fails()){
+    //         return response(
+    //             [
+    //                 'message' => 'Validation errors',
+    //                 'errors' =>  $validator->errors(),
+    //                 'status' => false
+    //             ], 422);
+    //     }
 
-        $makeUniqueName = 'profile_' . time() . '-' . uniqid();
-        if ($request->hasFile('profile_image')) {
-            $file_name = $makeUniqueName . '.' . $request->file('profile_image')->getClientOriginalExtension();
+    //     $makeUniqueName = 'profile_' . time() . '-' . uniqid();
+    //     if ($request->hasFile('profile_image')) {
+    //         $file_name = $makeUniqueName . '.' . $request->file('profile_image')->getClientOriginalExtension();
          
-            //Store local storage
-            $request->profile_image->storeAs('public/profile', $file_name);
+    //         //Store local storage
+    //         $request->profile_image->storeAs('public/profile', $file_name);
          
-            $contentFile = 'profile/' . $file_name;
-        }
-        $find = User::where('id', $request->user()->id)->first();
+    //         $contentFile = 'profile/' . $file_name;
+    //     }
+    //     $find = User::where('id', $request->user()->id)->first();
        
 
-        if($find){
-            $find->image = $contentFile;
-            $find->save();
-            // dump($find);
+    //     if($find){
+    //         $find->image = $contentFile;
+    //         $find->save();
+    //         // dump($find);
         
-            $payload = [
-                'code'         => 200,
-                'app_message'  => 'Successfully',
-                'user_message' => 'Successfully'
-            ];
-            return response()->json($payload, 200);
-        }else{
-            $payload = [
-                'code'         => 500,
-                'app_message'  => 'Unsuccessful',
-                'user_message' => 'Unsuccessful'
-            ];
-            return response()->json($payload, 200);
-        }
+    //         $payload = [
+    //             'code'         => 200,
+    //             'app_message'  => 'Successfully',
+    //             'user_message' => 'Successfully'
+    //         ];
+    //         return response()->json($payload, 200);
+    //     }else{
+    //         $payload = [
+    //             'code'         => 500,
+    //             'app_message'  => 'Unsuccessful',
+    //             'user_message' => 'Unsuccessful'
+    //         ];
+    //         return response()->json($payload, 200);
+    //     }
+    // }
 
+    public function profileImageUpdate(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'profile_image' => 'required|file|max:5120'
+    ]);
 
+    if ($validator->fails()) {
+        return response([
+            'message' => 'Validation errors',
+            'errors' => $validator->errors(),
+            'status' => false
+        ], 422);
     }
+
+    $makeUniqueName = 'profile_' . time() . '-' . uniqid();
+
+    if ($request->hasFile('profile_image')) {
+        $file_name = $makeUniqueName . '.' . $request->file('profile_image')->getClientOriginalExtension();
+
+        // Store in local storage
+        $request->file('profile_image')->storeAs('public/profile', $file_name);
+
+        $contentFile = 'profile/' . $file_name;
+    }
+
+    $user = User::find($request->user()->id);
+
+    if ($user) {
+        $user->image = $contentFile;
+        $user->save();
+
+        // Create full URL for the profile image
+        $user->image_url = asset('storage/' . $contentFile);
+
+        $payload = [
+            'code'         => 200,
+            'app_message'  => 'Profile image updated successfully',
+            'user_message' => 'Profile image updated successfully',
+            'data'         => $user // includes full user profile with image URL
+        ];
+        return response()->json($payload, 200);
+    } else {
+        $payload = [
+            'code'         => 500,
+            'app_message'  => 'User not found',
+            'user_message' => 'User not found'
+        ];
+        return response()->json($payload, 500);
+    }
+}
+
+
     public function educationSubmit(Request $request){
         $validator = Validator::make($request->all(), [
             'title' => 'required',
             'institution_name' => 'required',
             'passing_year' => 'required',
             'grade' => 'required',
-            'certificate' => 'required',
+            'certificate' => 'required|file|max:5120',
         ]);
         if($validator->fails()){
             return response(
@@ -362,7 +413,7 @@ class CommonController extends Controller
             'company_name' => 'required',
             'from' => 'required',
             'location' => 'required',
-            'experience_letter' => 'required',
+            'experience_letter' => 'required|file|max:5120',
         ]);
         if($validator->fails()){
             return response(
